@@ -1,6 +1,8 @@
 package dev.ingon.opvault;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.time.Instant;
@@ -57,7 +59,9 @@ class JsonURLHandler extends JsonBaseHandler<URL> {
     @Override
     public boolean stringValue(char[] source, int begin, int end, int escapeCount) throws ParseException {
         try {
-            complete(new URL(readString(source, begin, end, escapeCount)));
+            complete(new URI(readString(source, begin, end, escapeCount)).toURL());
+        } catch (URISyntaxException e) {
+            throw new ParseException(-1, "not an url: " + e.getMessage());
         } catch (MalformedURLException e) {
             throw new ParseException(-1, "not an url: " + e.getMessage());
         }
