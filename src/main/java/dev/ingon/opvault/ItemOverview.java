@@ -15,6 +15,7 @@ public class ItemOverview {
         
         handler.arrayProperty("URLs", ItemOverviewUrl.newParser(), (t, o) -> t.urls = o);
         handler.arrayProperty("tags", new JsonStringHandler(), (t, o) -> t.tags = o);
+        handler.arrayProperty("appIds", new JsonStringHandler(), (t, o) -> t.appIds = o);
 
         handler.numberProperty("ps", (t, o) -> t.ps = o.intValue());
         
@@ -29,6 +30,7 @@ public class ItemOverview {
     private String url;
     private List<ItemOverviewUrl> urls;
     private List<String> tags;
+    private List<String> appIds;
     private Integer ps;
     
     private Boolean pgrng;
