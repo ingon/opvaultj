@@ -169,6 +169,16 @@ public class Profile {
     }
 
     public List<Item> getItems() throws ProfileReadException, ProfileBandFormatException, ProfileBandReadException, ProfileAttachmentException {
+        var allItems = readItems();
+        loadAttachments(allItems);
+        return new ArrayList<Item>(allItems.values());
+    }
+
+    public List<Item> getItemsWithoutAttachments() throws ProfileReadException, ProfileBandFormatException, ProfileBandReadException {
+        return new ArrayList<Item>(readItems().values());
+    }
+
+    private Map<String, Item> readItems() throws ProfileReadException, ProfileBandFormatException, ProfileBandReadException {
         try (var ds = Files.newDirectoryStream(path, "band_[0123456789ABCDEF].js")) {
             var allItems = new HashMap<String, Item>();
             for (var band : ds) {
@@ -176,9 +186,7 @@ public class Profile {
                 allItems.putAll(items);
             }
             
-            loadAttachments(allItems);
-            
-            return new ArrayList<Item>(allItems.values());
+            return allItems;
         } catch (IOException exc) {
             throw new ProfileReadException(path, exc);
         }
